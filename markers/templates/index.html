@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" id="content" Style="align-content: center;">
+    <form method="post">
+        {% csrf_token %}
+    <input class="btn btn-outline-primary" style="width: 500px; height: 50px;" type="submit" name="RO" value="Regional Office (RO)" />
+    </br>
+</br>
+    <input class="btn btn-outline-primary" style="width: 500px; height: 50px;"  type="submit" name="PO" value="Provincial Offices (PO)" /> 
+    </br>
+</br>
+    
+    <input class="btn btn-outline-primary" style="width: 500px; height: 50px;"  type="submit" name="TTI" value="TESDA Technology Institutions (TTI)" />
+    </br> 
+</br>
+<input class="btn btn-outline-primary" style="width: 500px; height: 50px;" type="submit" name="TAS" value="TESDA Administered Schools (TAS)" /> 
+    </br>
+</br>
+<input class="btn btn-outline-primary" style="width: 500px; height: 50px;" type="submit" name="TVI" value="TESDA Vocational Institutions (TVI)" /> 
+    </br>
+</br>
+    <input class="btn btn-outline-primary" style="width: 500px; height: 50px;" type="submit" name="ALL" value="ALL OFFICES AND SCHOOLS" />
+    </form>
+
+<form>    
+    <div id="map" style="height: 600px; width: 800px;"></div>
+</div>
+
+
+    
+
+
+
+
+{{ stations|json_script:"stations_json" }}
+
+
+
+
+
+<script>
+var map = L.map('map').setView([8.447621, 124.646399], 8);
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+}).addTo(map)
+
+let stations = JSON.parse(document.getElementById('stations_json').textContent)
+
+// ADD MARKER //
+
+stations.forEach(stations => {
+     L.marker([stations.latitude, stations.longitude]).addTo(map).bindTooltip("<b>"+ stations.instituion + "</b>" + "</br>" + stations.category + "</br>" + stations.address + "</b>" + "</br>" + stations.telnumber).on('click',onclick)
+
+
+     function onclick(e){
+        window.open(stations.facebook);
+     }
+    
+
+})
+    
+
+
+
+</script>
+
+</container>
+{% endblock %}
